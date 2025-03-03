@@ -16,6 +16,7 @@ function render(leads) {
 saveInputBtn.addEventListener("click", function () {
   const inputValue = inputEl.value;
   leadsArr.push(inputValue);
+  inputEl.value = "";
   render(leadsArr);
   savetoLocalStorage(leadsArr);
   console.log(leadsArr);
@@ -23,5 +24,5 @@ saveInputBtn.addEventListener("click", function () {
 
 function savetoLocalStorage(leads) {
   localStorage.setItem("myArr", JSON.stringify(leads));
-  localStorage.JSON.parse();
+  console.log(localStorage.getItem("myArr"));
 }
