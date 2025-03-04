@@ -1,3 +1,11 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+
+const firebaseConfig = {};
+
+const app = initializeApp(firebaseConfig);
+
+console.log(app);
+
 let leadsArr = [];
 const inputEl = document.querySelector("#input-el");
 const saveInputBtn = document.querySelector("#input-btn");
@@ -28,12 +36,17 @@ saveInputBtn.addEventListener("click", function () {
   render(leadsArr);
 });
 
+saveTabBtn.addEventListener("click", function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const leadsFromTab = tabs[0].url;
+    leadsArr.push(leadsFromTab);
+    localStorage.setItem("myLeads", JSON.stringify(leadsArr));
+    render(leadsArr);
+  });
+});
+
 deleteBtn.addEventListener("click", function () {
   localStorage.clear();
   leadsArr = [];
   render(leadsArr);
-});
-
-saveTabBtn.addEventListener("click", function () {
-  console.log("clicked");
 });
