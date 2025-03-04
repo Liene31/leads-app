@@ -1,12 +1,20 @@
+let leadsArr = [];
 const inputEl = document.querySelector("#input-el");
 const saveInputBtn = document.querySelector("#input-btn");
+const deleteBtn = document.querySelector("#delete-btn");
+const saveTabBtn = document.querySelector("#tab-btn");
 const listEl = document.querySelector("#list-el");
-const leadsArr = [];
+const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
+
+if (leadsFromLocalStorage) {
+  leadsArr = leadsFromLocalStorage;
+  render(leadsArr);
+}
 
 function render(leads) {
   let listItems = "";
 
-  for (let i = 0; i < leadsArr.length; i++) {
+  for (let i = 0; i < leads.length; i++) {
     listItems += `<li><a href="${leads[i]}" target="_blank">${leads[i]}</a></li>`;
   }
 
@@ -14,15 +22,18 @@ function render(leads) {
 }
 
 saveInputBtn.addEventListener("click", function () {
-  const inputValue = inputEl.value;
-  leadsArr.push(inputValue);
+  leadsArr.push(inputEl.value);
   inputEl.value = "";
+  localStorage.setItem("myLeads", JSON.stringify(leadsArr));
   render(leadsArr);
-  savetoLocalStorage(leadsArr);
-  console.log(leadsArr);
 });
 
-function savetoLocalStorage(leads) {
-  localStorage.setItem("myArr", JSON.stringify(leads));
-  console.log(localStorage.getItem("myArr"));
-}
+deleteBtn.addEventListener("click", function () {
+  localStorage.clear();
+  leadsArr = [];
+  render(leadsArr);
+});
+
+saveTabBtn.addEventListener("click", function () {
+  console.log("clicked");
+});
