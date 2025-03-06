@@ -3,6 +3,7 @@ import {
   ref,
   push,
   onValue,
+  remove,
   getDatabase,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 const firebaseConfig = {
@@ -20,8 +21,10 @@ const deleteBtn = document.querySelector("#delete-btn");
 const listEl = document.querySelector("#list-el");
 
 onValue(leadsRef, function (snapshot) {
-  const leads = Object.values(snapshot.val());
-  render(leads);
+  if (snapshot.exists()) {
+    const leads = Object.values(snapshot.val());
+    render(leads);
+  }
 });
 
 function render(leads) {
@@ -38,10 +41,9 @@ saveInputBtn.addEventListener("click", function () {
   const leadsArr = push(leadsRef, inputEl.value);
   Object.values(leadsArr);
   inputEl.value = "";
-  render(leadsArr);
 });
 
 deleteBtn.addEventListener("click", function () {
-  leadsArr = [];
-  render(leadsArr);
+  remove(leadsRef);
+  listEl.innerHTML = "";
 });
