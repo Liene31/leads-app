@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import {
+  ref,
+  push,
+  onValue,
+  getDatabase,
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 const firebaseConfig = {
   databaseURL:
     "https://leads-tracker-app-d4c5e-default-rtdb.europe-west1.firebasedatabase.app/",
@@ -7,12 +12,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const leadsRef = ref(database, "leads");
 
-let leadsArr = [];
 const inputEl = document.querySelector("#input-el");
 const saveInputBtn = document.querySelector("#input-btn");
 const deleteBtn = document.querySelector("#delete-btn");
 const listEl = document.querySelector("#list-el");
+
+onValue(leadsRef, function (snapshot) {
+  const leads = Object.values(snapshot.val());
+  render(leads);
+});
 
 function render(leads) {
   let listItems = "";
@@ -25,7 +35,8 @@ function render(leads) {
 }
 
 saveInputBtn.addEventListener("click", function () {
-  leadsArr.push(inputEl.value);
+  const leadsArr = push(leadsRef, inputEl.value);
+  Object.values(leadsArr);
   inputEl.value = "";
   render(leadsArr);
 });
