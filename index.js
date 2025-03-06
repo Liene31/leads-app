@@ -1,16 +1,19 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-
-const firebaseConfig = {};
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+const firebaseConfig = {
+  databaseURL:
+    "https://leads-tracker-app-d4c5e-default-rtdb.europe-west1.firebasedatabase.app/",
+};
 
 const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-console.log(app);
+console.log(firebaseConfig.databaseURL);
 
 let leadsArr = [];
 const inputEl = document.querySelector("#input-el");
 const saveInputBtn = document.querySelector("#input-btn");
 const deleteBtn = document.querySelector("#delete-btn");
-const saveTabBtn = document.querySelector("#tab-btn");
 const listEl = document.querySelector("#list-el");
 const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
 
@@ -34,15 +37,6 @@ saveInputBtn.addEventListener("click", function () {
   inputEl.value = "";
   localStorage.setItem("myLeads", JSON.stringify(leadsArr));
   render(leadsArr);
-});
-
-saveTabBtn.addEventListener("click", function () {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    const leadsFromTab = tabs[0].url;
-    leadsArr.push(leadsFromTab);
-    localStorage.setItem("myLeads", JSON.stringify(leadsArr));
-    render(leadsArr);
-  });
 });
 
 deleteBtn.addEventListener("click", function () {
